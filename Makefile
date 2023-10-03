@@ -13,6 +13,12 @@ GOVARS = -X github.com/zyedidia/micro/v2/internal/util.Version=$(VERSION) -X git
 DEBUGVAR = -X github.com/zyedidia/micro/v2/internal/util.Debug=ON
 VSCODE_TESTS_BASE_URL = 'https://raw.githubusercontent.com/microsoft/vscode/e6a45f4242ebddb7aa9a229f85555e8a3bd987e2/src/vs/editor/test/common/model/'
 
+vendor:
+	./wanix_patch.sh
+
+wasm: generate
+	GOOS=js GOARCH=wasm go build -o ./micro.wasm -trimpath -ldflags "-s -w $(GOVARS)" ./cmd/micro
+
 build: generate build-quick
 
 build-quick:

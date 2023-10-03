@@ -1,0 +1,93 @@
+diff --git a/vendor/github.com/mattn/go-isatty/isatty_js.go b/vendor/github.com/mattn/go-isatty/isatty_js.go
+new file mode 100644
+index 00000000..4800321c
+--- /dev/null
++++ b/vendor/github.com/mattn/go-isatty/isatty_js.go
+@@ -0,0 +1,16 @@
++//go:build js
++// +build js
++
++package isatty
++
++// IsTerminal returns true if the file descriptor is terminal which
++// is always false on js and appengine classic which is a sandboxed PaaS.
++func IsTerminal(fd uintptr) bool {
++	return true
++}
++
++// IsCygwinTerminal() return true if the file descriptor is a cygwin or msys2
++// terminal. This is also always false on this environment.
++func IsCygwinTerminal(fd uintptr) bool {
++	return false
++}
+diff --git a/vendor/github.com/mattn/go-isatty/isatty_others.go b/vendor/github.com/mattn/go-isatty/isatty_others.go
+index ff714a37..de398b3a 100644
+--- a/vendor/github.com/mattn/go-isatty/isatty_others.go
++++ b/vendor/github.com/mattn/go-isatty/isatty_others.go
+@@ -1,4 +1,5 @@
+-// +build appengine js nacl
++//go:build appengine || nacl
++// +build appengine nacl
+ 
+ package isatty
+ 
+diff --git a/vendor/github.com/zyedidia/tcell/v2/tscreen_js.go b/vendor/github.com/zyedidia/tcell/v2/tscreen_js.go
+new file mode 100644
+index 00000000..d56e4524
+--- /dev/null
++++ b/vendor/github.com/zyedidia/tcell/v2/tscreen_js.go
+@@ -0,0 +1,31 @@
++//go:build js
++
++package tcell
++
++import (
++	"fmt"
++	"os"
++)
++
++// This stub file is for systems that have no termios.
++
++type termiosPrivate struct{}
++
++func (t *tScreen) termioInit() error {
++	t.in = os.Stdin
++	t.out = os.Stdout
++	t.resize()
++	return nil
++}
++
++func (t *tScreen) termioFini() {
++}
++
++func (t *tScreen) getWinSize() (int, int, error) {
++	return 129, 24, nil
++}
++
++func (t *tScreen) Beep() error {
++	fmt.Fprintln(os.Stderr, "Beep!")
++	return nil
++}
+diff --git a/vendor/github.com/zyedidia/terminal/ioctl_other.go b/vendor/github.com/zyedidia/terminal/ioctl_other.go
+index c08989bf..9ac64ca9 100644
+--- a/vendor/github.com/zyedidia/terminal/ioctl_other.go
++++ b/vendor/github.com/zyedidia/terminal/ioctl_other.go
+@@ -1,4 +1,5 @@
+-// +build plan9 nacl windows
++//go:build plan9 || nacl || windows || js
++// +build plan9 nacl windows js
+ 
+ package terminal
+ 
+diff --git a/vendor/github.com/zyedidia/terminal/vt_other.go b/vendor/github.com/zyedidia/terminal/vt_other.go
+index d16c91e1..b97e26af 100644
+--- a/vendor/github.com/zyedidia/terminal/vt_other.go
++++ b/vendor/github.com/zyedidia/terminal/vt_other.go
+@@ -1,5 +1,5 @@
+-//go:build plan9 || nacl || windows
+-// +build plan9 nacl windows
++//go:build plan9 || nacl || windows || js
++// +build plan9 nacl windows js
+ 
+ package terminal
+ 

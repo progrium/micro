@@ -18,3 +18,5 @@ tools/info-plist
 tools/vscode-tests/
 *.hdr
 /local
+/vendor
+micro.wasm
