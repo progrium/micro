@@ -1,4 +1,5 @@
-// +build plan9 nacl windows
+//go:build plan9 || nacl || windows || js
+// +build plan9 nacl windows js
 
 package action
 
